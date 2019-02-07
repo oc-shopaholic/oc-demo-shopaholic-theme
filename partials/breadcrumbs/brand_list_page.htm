@@ -1,0 +1,9 @@
+<div>
+    <ul class="uk-breadcrumb uk-margin-small-top uk-margin-remove-bottom">
+        <li><a href="/">Home</a></li>
+        {% if this.page.id != 'brand_list' %}
+            <li><a href="{{ 'brand_list'|page }}">Brand list</a></li>
+        {% endif %}
+        <li><span>{{ sTitle|default(this.page.title) }}</span></li>
+    </ul>
+</div>

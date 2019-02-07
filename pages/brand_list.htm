@@ -1,0 +1,43 @@
+title = "Brand list"
+url = "/brands"
+layout = "main"
+meta_title = "Brand list"
+is_hidden = 0
+
+[BrandList]
+
+[Pagination]
+count_per_page = 6
+pagination_limit = 5
+active_class = "uk-active"
+button_list = "prev,first,first-more,main,last-more,last,next"
+first_button_name = "First"
+first_button_limit = 3
+first-more_button_name = "..."
+first-more_button_limit = 3
+prev_button_name = "Prev"
+prev_button_limit = 1
+prev-more_button_name = "..."
+prev-more_button_limit = 1
+next-more_button_name = "..."
+next-more_button_limit = 1
+next_button_name = "Next"
+next_button_limit = 1
+last-more_button_name = "..."
+last-more_button_limit = 3
+last_button_name = "Last"
+last_button_limit = 3
+
+[viewBag]
+localeUrl[my] = "/brand-list"
+==
+<div class="uk-grid uk-margin-remove-left">
+    <div class="uk-width-5-6">
+        {% partial 'breadcrumbs/brand_list_page' %}
+        {% partial 'common/page_title' sPageTitle=this.page.title %}
+        <div class="brand_list_wrapper">
+            {% partial 'ajax/ajax_brand_list' %}
+        </div>
+    </div>
+    {% partial 'right_panel/right_common_panel' %}
+</div>

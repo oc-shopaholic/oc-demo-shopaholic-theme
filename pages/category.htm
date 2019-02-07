@@ -1,0 +1,48 @@
+title = "Parent category page"
+url = "/catalog/:parent"
+layout = "main"
+meta_title = "Parent category page"
+is_hidden = 0
+
+[CategoryPage]
+slug = "{{ :parent }}"
+slug_required = 1
+smart_url_check = 0
+
+[CatalogBreadcrumbs]
+
+[ProductList]
+sorting = "new"
+==
+{# Get parent category item #}
+{% set obParentCategory = CategoryPage.get() %}
+
+{# Get breadcrumbs #}
+{% set arBreadcrumbs = CatalogBreadcrumbs.getByCategoryID(obParentCategory.id) %}
+
+<div class="uk-grid uk-margin-remove-left">
+    <div class="uk-width-5-6">
+        {% partial 'breadcrumbs/catalog' arBreadcrumbs=arBreadcrumbs %}
+
+        {% partial 'category/category_info' obCategory=obParentCategory %}
+
+        <h4>Category list:</h4>
+        {% if obParentCategory.children is not empty %}
+            <ul class="uk-list uk-list-bullet">
+                {% for obCategory in obParentCategory.children if obCategory.product_count > 0 %}
+                    <li>
+                        <a class="uk-text-large" href="{{ obCategory.getPageUrl('product_list') }}">{{ obCategory.name }}</a>
+                        {# Get random product from category #}
+                        {% set obProductList = ProductList.make().category(obCategory.id).active().random(6) %}
+                        {% partial 'product/product_slider' obProductList=obProductList %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% partial 'category/category_description' obCategory=obParentCategory %}
+    </div>
+    <div class="uk-width-1-6">
+        {% partial 'right_panel/category_page' %}
+    </div>
+</div>

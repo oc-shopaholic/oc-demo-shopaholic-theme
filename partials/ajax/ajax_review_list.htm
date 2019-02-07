@@ -1,0 +1,33 @@
+{# @var obProduct \Lovata\Shopaholic\Classes\Item\ProductItem #}
+
+{% if obProduct is empty %}
+    {% set obProduct = ProductPage.get() %}
+{% endif %}
+
+{% set obReviewList = obProduct.review.active() %}
+
+{# Get review count for pagination #}
+{% set iCount = obReviewList.count() %}
+
+{# Get page from request#}
+{% set iPage = Pagination.getPageFromRequest() %}
+{% set iElementOnPage = Pagination.getCountPerPage() %}
+
+{% set arReviewList = obReviewList.page(iPage, iElementOnPage) %}
+{% if arReviewList is not empty %}
+<ul class="uk-comment-list">
+    {% for obReview in arReviewList %}
+        <li class="uk-margin-small-top">
+            {% partial 'card/review_card' obReview=obReview %}
+        </li>
+        <hr class="uk-margin-small-top">
+    {% endfor %}
+</ul>
+{% else %}
+    <div class="uk-alert-danger uk-margin-small-left" uk-alert>
+        <p><strong>Reviews not found!</strong></p>
+    </div>
+{% endif %}
+<div class="uk-margin-small-left">
+    {% partial 'common/pagination' iCount=iCount iPage=iPage %}
+</div>

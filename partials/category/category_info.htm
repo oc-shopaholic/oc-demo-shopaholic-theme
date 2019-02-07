@@ -1,0 +1,11 @@
+{% partial 'common/page_title' sPageTitle=obCategory.name %}
+
+{% if obCategory.preview_image is not empty %}
+    <div class="uk-cover-container uk-height-medium">
+        <img src="{{ obCategory.preview_image.path }}" alt="" uk-cover>
+    </div>
+{% endif %}
+{% if obCategory.preview_text is not empty %}
+    <div class="uk-section-xsmall">{{ obCategory.preview_text }}</div>
+{% endif %}
+

@@ -1,0 +1,32 @@
+{% set arPagination = Pagination.get(iPage, iCount) %}
+
+{% if arPagination is not empty %}
+    <ul class="uk-pagination" uk-margin>
+        {% for arPage in arPagination %}
+            {% if arPage.code == 'prev' %}
+                <li>
+                    <a href="?page={{ arPage.value }}" data-page="{{ arPage.value }}">
+                        <span uk-pagination-previous></span>
+                    </a>
+                </li>
+            {% elseif arPage.code == 'first-more' or arPage.code == 'last-more' %}
+                <li class="uk-disabled"><span>...</span></li>
+            {% elseif arPage.code == 'next' %}
+                <li>
+                    <a href="?page={{ arPage.value }}" data-page="{{ arPage.value }}">
+                        <span uk-pagination-next></span>
+                    </a>
+                </li>
+            {% elseif iPage == arPage.value %}
+                <li class="{{ arPage.class }}"><span>{{ arPage.value }}</span>
+                </li>
+            {% else %}
+                <li>
+                    <a href="?page={{ arPage.value }}" data-page="{{ arPage.value }}">
+                        {{ arPage.value }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}

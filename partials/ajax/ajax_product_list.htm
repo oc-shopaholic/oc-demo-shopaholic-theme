@@ -1,0 +1,52 @@
+{% if obCategory is empty %}
+    {# Get category item #}
+    {% set obCategory = CategoryPage.get() %}
+    
+    {# Get product collection, apply sorting and filters by active, category #}
+    {% set obProductList = ProductList.make().sort(ProductList.getSorting()).active().category(obCategory.id) %}
+{% endif %}
+
+{% if bHasFilterPlugin %}
+    {# Apply filters by price, brands #}
+    {% set obProductList = obProductList.filterByBrandList(input('brand')).filterByPrice(input('price.from'), input('price.to')) %}
+
+    {# Apply filter by product properties #}
+    {% set obProductList = obProductList.filterByProperty(input('product'), obCategory.product_filter_property) %}
+
+    {# Apply filter by offer properties #}
+    {% set obProductList = obProductList.filterByProperty(input('offer'), obCategory.offer_filter_property) %}
+
+    {# Apply filter by discount#}
+    {% if input('discount') %}
+        {% set obProductList = obProductList.filterByDiscount() %}
+    {% endif %}
+
+    {# Apply filter by quantity #}
+    {% if input('quantity') %}
+        {% set obProductList = obProductList.filterByQuantity() %}
+    {% endif %}
+{% endif %}
+
+{# Get product count for pagination #}
+{% set iCount = obProductList.count() %}
+
+{# Get page from request#}
+{% set iPage = Pagination.getPageFromRequest() %}
+{% set iElementOnPage = Pagination.getCountPerPage() %}
+
+
+{% set arProductList = obProductList.page(iPage, iElementOnPage) %}
+
+{% if arProductList is not empty %}
+        {# Render product list #}
+        {% for obProduct in arProductList %}
+            {% partial 'card/product_card' obProduct=obProduct %}
+        {% endfor %}
+    <div class="uk-margin-small-left">
+        {% partial 'common/pagination' iCount=iCount iPage=iPage %}
+    </div>
+{% else %}
+    <div class="uk-alert-danger uk-margin-small-left" uk-alert>
+        <p><strong>Products not found!</strong></p>
+    </div>
+{% endif %}

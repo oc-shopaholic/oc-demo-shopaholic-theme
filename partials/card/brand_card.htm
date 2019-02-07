@@ -1,0 +1,21 @@
+<div>
+    <div class="uk-card uk-card-small uk-card-default uk-card-hover">
+        <div class="uk-card-media-top uk-text-center">
+            <a href="{{ 'brand'|page({'slug': obBrand.slug}) }}">
+                {% if obBrand.preview_image is not empty %}
+                    <img class="brand_list_item_img" src="{{ obBrand.preview_image.getThumb(300, 200) }}"
+                         alt="{{ obBrand.preview_image.description }}"
+                         title="{{ obBrand.preview_image.title }}">
+                {% else %}
+                    <img class="brand_list_item_img" src="{{ 'no-image.png'|media }}" alt="" title="" height="250" width="250">
+                {% endif %}
+            </a>
+        </div>
+        <div class="uk-card-body">
+            <h3 class="uk-card-title">
+                <a href="{{ 'brand'|page({'slug': obBrand.slug}) }}">{{ obBrand.name }}</a>
+            </h3>
+            <p>{{ obBrand.preview_text }}</p>
+        </div>
+    </div>
+</div>

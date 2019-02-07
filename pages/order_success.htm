@@ -1,0 +1,15 @@
+title = "Order success"
+url = "/order/:key"
+layout = "main"
+is_hidden = 0
+
+[OrderPage]
+slug = "{{ :key }}"
+slug_required = 1
+==
+{% set obOrder = OrderPage.get() %}
+<div class="uk-section">
+    <h1 class="uk-text-center">
+        Your order number is <span class="uk-text-danger">{{ obOrder.order_number }}</span>
+    </h1>
+</div>

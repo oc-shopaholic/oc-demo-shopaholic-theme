@@ -1,0 +1,22 @@
+{# Get brand collection, apply sorting and filter by active flag #}
+{% set obBrandList =  BrandList.make().sort().active() %}
+{% set iCount = obBrandList.count() %}
+
+{# Get page from request#}
+{% set iPage = Pagination.getPageFromRequest() %}
+{% set iElementOnPage = Pagination.getCountPerPage() %}
+
+{% set arBrandList = obBrandList.page(iPage, iElementOnPage) %}
+
+{% if arBrandList is not empty %}
+    <div class="uk-child-width-1-3@m" uk-grid>
+        {# Render brand list #}
+
+        {% for obBrand in arBrandList %}
+            {% partial 'card/brand_card' obBrand=obBrand %}
+        {% endfor %}
+    </div>
+    {% partial 'common/pagination' iCount=iCount iPage=iPage %}
+{% else %}
+    <h4>Brands not found.</h4>
+{% endif %}

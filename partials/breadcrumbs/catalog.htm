@@ -1,0 +1,22 @@
+<div>
+    <ul class="uk-breadcrumb uk-margin-small-top uk-margin-remove-bottom">
+        <li><a href="/">Home</a></li>
+        {% if this.page.id != 'category_list' %}
+            <li><a href="{{ 'category_list'|page }}">Catalog</a></li>
+        {% else %}
+            <li><span>Catalog</span></li>
+        {% endif %}
+        {% for arItem in arBreadcrumbs %}
+            {% if loop.last == true %}
+                <li><span>{{ arItem.name }}</span></li>
+            {% else %}
+                {% if arItem.item.nest_depth == 0 %}
+                    {% set sPage = 'category' %}
+                {% else %}
+                    {% set sPage = 'product_list' %}
+                {% endif %}
+                <li><a href="{{ arItem.item.getPageUrl(sPage) }}">{{ arItem.name }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

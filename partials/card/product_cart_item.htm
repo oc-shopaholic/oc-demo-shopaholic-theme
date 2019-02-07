@@ -1,0 +1,144 @@
+{# Get cart offer object #}
+{% set obCartOffer = obCartItem.offer %}
+
+{# Get product object #}
+{% set obProduct = obCartOffer.product %}
+{% set obOfferList = obProduct.offer.active() %}
+
+{% if obCartOffer.isNotEmpty() and obProduct.isNotEmpty() %}
+<div>
+    <form class="_cart_item_form">
+        <div class="uk-card uk-card-default uk-card-hover uk-grid-collapse uk-margin uk-text-middle product_cart_wrapper" uk-grid>
+            <div class="uk-card-media-left">
+                <a href="{{ obProduct.getPageUrl('product') }}">
+                    {% if obProduct.preview_image is not empty %}
+                        <img class="product_list_item_img" src="{{ obProduct.preview_image.getThumb(250, 330) }}"
+                             alt="{{ obProduct.preview_image.description }}"
+                             title="{{ obProduct.preview_image.title }}">
+                    {% else %}
+                        <img class="product_list_item_img" src="{{ 'no-image.png'|media }}" alt="" title="" height="300" width="300">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="uk-width-expand">
+                <div class="uk-card-header uk-padding-small">
+                    <div class="uk-grid">
+                        <div class="uk-width-4-5">
+                            <h3 class="uk-card-title">
+                                <a href="{{ obProduct.getPageUrl('product') }}">{{ obProduct.name }}</a>
+                            </h3>
+                        </div>
+                        <div class="uk-width-1-5 uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-text-right">
+                            <strong class="uk-text-danger">{{ obCartItem.price }} {{ obCartOffer.currency }}</strong>
+                            {% if obCartItem.discount_price_value > 0 %}
+                                <s class="uk-margin-small-left">{{ obCartItem.old_price }} {{ obCartOffer.currency }}</s> (-{{ obCartItem.discount_price }})
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-card-body uk-padding-small">
+                    <p>{{ obProduct.preview_text| truncate(150) }}</p>
+                </div>
+
+                {% if bHasPropertiesPlugin %}
+                    <div class="uk-child-width-1-2" uk-grid>
+                        <div>
+                            {% partial 'product/product_main_properties' obProduct=obProduct sColumnClass='uk-column-1-2' %}
+                        </div>
+                        <div>
+                            <fieldset class="uk-fieldset">
+                                {% set obProperty = obCartOffer.property.active().sort().first() %}
+                                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                                    <span>{{ obProperty.name }}:</span>
+                                    {% for obOffer in obOfferList %}
+                                        {% set bHasOfferInCart = obCartItemList.hasOffer(obOffer.id) %}
+                                        {% set sClass = '' %}
+                                        {% set sTitle = '' %}
+                                        {% if bHasOfferInCart and obCartOffer.id != obOffer.id %}
+                                            {% set sClass = 'uk-text-success' %}
+                                            {% set sTitle = 'Offer in cart' %}
+                                        {% elseif obOffer.quantity == 0 %}
+                                            {% set sClass = 'uk-text-muted' %}
+                                            {% set sTitle = 'Offer is not available' %}
+                                        {% endif %}
+                                        <label class="_choose_cart_offer_field  {{ sClass }}" {% if sTitle is not empty %}title="{{ sTitle }}" uk-tooltip{% endif %}>
+                                            <input
+                                                    class="uk-radio uk-margin-small-right"
+                                                    type="radio"
+                                                    name="offer_id"
+                                                    value="{{ obOffer.id }}"
+                                                    data-quantity="{{ obOffer.quantity }}"
+                                                    {% if obCartOffer.id == obOffer.id %}checked{% endif %}
+                                                    {% if obOffer.quantity == 0  or (bHasOfferInCart and obCartOffer.id != obOffer.id) %} disabled{% endif %}>
+                                            {{ obOffer.property.find(obProperty.id).property_value.getValueString() }} {{ obProperty.measure.name }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                                <div class="uk-margin">
+                                    <input
+                                            class="uk-input uk-form-width-small _quantity_field {% if obCartItem.quantity > obCartOffer.quantity %}uk-form-danger{% endif %}"
+                                            type="number"
+                                            min="1"
+                                            max="{{ obCartOffer.quantity }}"
+                                            placeholder="Quantity"
+                                            value="{{ obCartItem.quantity }}">
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                {% else %}
+                    <fieldset class="uk-fieldset">
+                        <div uk-grid>
+                            <div class="uk-margin-small-left uk-width-1-2">
+                                <div class="uk-margin">
+                                    {% for obOffer in obOfferList %}
+                                        {% set bHasOfferInCart = obCartItemList.hasOffer(obOffer.id) %}
+                                        {% set sClass = '' %}
+                                        {% set sTitle = '' %}
+                                        {% if bHasOfferInCart and obCartOffer.id != obOffer.id %}
+                                            {% set sClass = 'uk-text-success' %}
+                                            {% set sTitle = 'Offer in cart' %}
+                                        {% elseif obOffer.quantity == 0 %}
+                                            {% set sClass = 'uk-text-muted' %}
+                                            {% set sTitle = 'Offer is not available' %}
+                                        {% endif %}
+                                        <div>
+                                            <label class="_choose_cart_offer_field {{ sClass }}" {% if sTitle is not empty %}title="{{ sTitle }}" uk-tooltip{% endif %}>
+                                                <input
+                                                        class="uk-radio uk-margin-small-right"
+                                                        type="radio"
+                                                        name="offer_id"
+                                                        value="{{ obOffer.id }}"
+                                                        {% if obCartOffer.id == obOffer.id %}checked{% endif %}
+                                                        data-quantity="{{ obOffer.quantity }}"
+                                                        {% if obOffer.quantity == 0 or (bHasOfferInCart and obCartOffer.id != obOffer.id) %}disabled{% endif %}>
+                                                {{ obOffer.name }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div>
+                                <div class="uk-margin">
+                                    <input class="uk-input uk-form-width-small _quantity_field" type="number" min="1" max="{{ obCartOffer.quantity }}" placeholder="Quantity" value="{{ obCartItem.quantity }}">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                {% endif %}
+                <div class="uk-card-footer uk-flex uk-flex-middle uk-flex-between uk-width-auto">
+                    <div class="uk-width-2-5 uk-text-left">
+                        {% partial 'product/product_rating' iRating=obProduct.rating %}
+                    </div>
+                    <div class="uk-width-3-5 uk-flex-around uk-text-right">
+                        <button class="uk-margin-small-right" uk-icon="icon: heart; ratio: 1.5"></button>
+                        <button class="uk-button uk-button-default _offer_update_cart_button" type="submit">Update</button>
+                        <button class="uk-button uk-button-danger uk-hidden _offer_add_cart_button">Add to cart</button>
+                        <button class="uk-button uk-button-secondary _offer_remove_cart_button">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endif %}

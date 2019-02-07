@@ -1,0 +1,16 @@
+{% if obProductList.isNotEmpty() or obProductList is not empty %}
+<div uk-slider="center: false" class="product-slider">
+    <div class="uk-position-relative uk-visible-toggle">        
+        <ul class="uk-slider-items uk-padding-remove uk-grid">
+            {% for obProduct in obProductList %}
+                <li class="uk-padding-remove uk-margin-small-left uk-margin-small-right slider-item">
+                    {% partial 'card/small_product_card' obProduct=obProduct %}
+                </li>
+            {% endfor %}
+        </ul>
+        <a class="uk-position-center-left-out uk-position-small " href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+        <a class="uk-position-center-right uk-position-small " href="#" uk-slidenav-next uk-slider-item="next"></a>
+    </div>
+    <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+</div>
+{% endif %}

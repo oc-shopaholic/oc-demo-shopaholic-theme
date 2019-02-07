@@ -1,0 +1,39 @@
+{# Get menu items #}
+{% set arMainMenu = staticMenuMain.menuItems() %}
+<header>
+    <nav class="uk-navbar-container" uk-navbar>
+        <div class="uk-navbar-left">
+            <a class="uk-navbar-item uk-logo" {% if this.page.id != 'index' %}href="/"{% endif %}>Home</a>
+            <ul class="uk-navbar-nav">
+
+                {# Process parent menu items #}
+                {% for obParentMenuItem in arMainMenu if obParentMenuItem.viewBag.isHidden == false %}
+                    <li class="{% if obParentMenuItem.isActive or obParentMenuItem.isChildActive %}uk-active{% endif %}">
+                        <a href="{{ obParentMenuItem.url }}">{{ obParentMenuItem.title }}</a>
+
+                        {# Process child menu items #}
+                        {% if obParentMenuItem.items is not empty %}
+
+                            <div class="uk-navbar-dropdown uk-margin-remove-top">
+                                <ul class="uk-nav uk-navbar-dropdown-nav">
+                                    {% for obMenu in obParentMenuItem.items if obMenu.viewBag.isHidden == false %}
+                                        <li class="{% if obMenu.isActive %}uk-active{% endif %}">
+                                            <a href="{{ obMenu.url }}">{{ obMenu.title }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+        <div class="uk-navbar-right">
+            <div class="_cart_info_wrapper">
+                {% partial 'cart/cart_info' %}
+            </div>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,99 @@
+title = "Product list"
+url = "/catalog/:parent/:slug"
+layout = "main"
+meta_title = "Product list"
+is_hidden = 0
+
+[CategoryPage]
+slug = "{{ :slug }}"
+slug_required = 1
+smart_url_check = 1
+
+[CategoryPage ParentCategoryPage]
+slug = "{{ :parent }}"
+slug_required = 1
+smart_url_check = 0
+
+[CatalogBreadcrumbs]
+
+[ProductList]
+sorting = "new"
+
+[ProductData]
+
+[BrandList]
+
+[Pagination]
+available_count_per_page = "5,10,15"
+count_per_page = 4
+pagination_limit = 5
+active_class = "uk-active"
+button_list = "prev,first,first-more,main,last-more,last,next"
+first_button_name = "First"
+first_button_limit = 3
+first-more_button_name = "..."
+first-more_button_limit = 3
+prev_button_name = "Prev"
+prev_button_limit = 1
+prev-more_button_name = "..."
+prev-more_button_limit = 1
+next-more_button_name = "..."
+next-more_button_limit = 1
+next_button_name = "Next"
+next_button_limit = 1
+last-more_button_name = "..."
+last-more_button_limit = 3
+last_button_name = "Last"
+last_button_limit = 3
+==
+<?php
+function onInit()
+{
+    $this['bHasPopularityPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.PopularityShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.PopularityShopaholic');
+    $this['bHasFilterPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.FilterShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.FilterShopaholic');
+    $this['bHasReviewsPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.ReviewsShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.ReviewsShopaholic');
+}
+?>
+==
+{# Get parent category item #}
+{% set obParentCategory = ParentCategoryPage.get() %}
+
+{# Get category item #}
+{% set obCategory = CategoryPage.get() %}
+
+{# Get breadcrumbs #}
+{% set arBreadcrumbs = CatalogBreadcrumbs.getByCategoryID(obCategory.id) %}
+
+{# Get product collection, apply sorting and filters by active, category #}
+{% set obProductList =  ProductList.make().sort(ProductList.getSorting()).active().category(obCategory.id) %}
+
+<div class="uk-grid uk-margin-remove-left ">
+    <div class="uk-width-expand">
+        {% partial 'breadcrumbs/catalog' arBreadcrumbs=arBreadcrumbs %}
+        {% partial 'category/category_info' obCategory=obCategory %}
+
+        <div class="uk-grid">
+            <div class="uk-width-1-5">
+                {% partial 'section/filter_pannel' obProductList=obProductList obCategory=obCategory %}
+            </div>
+            <div class="uk-width-4-5">
+                <div class="uk-child-width-1-1@m product_list_wrapper" uk-grid>
+                    {% partial 'ajax/ajax_product_list' obCategory=obCategory obProductList=obProductList %}
+                </div>
+            </div>
+        </div>
+
+        {% partial 'category/category_description' obCategory=obCategory %}
+    </div>
+    <div class="right-panel_width">
+        {% partial 'right_panel/product_list_page' %}
+    </div>
+</div>
+
+<!-- This is the modal with the outside close button -->
+<div class="uk-flex-top _modal_product uk-modal-container" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+        <button class="uk-modal-close-outside" type="button" uk-close></button>
+        <div class="_modal_product_wrapper"></div>
+    </div>
+</div>

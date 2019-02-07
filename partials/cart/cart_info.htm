@@ -1,0 +1,8 @@
+{# Get CartElementCollection class object #}
+{% set obCartItemList = Cart.get() %}
+<div class="uk-margin-small-right uk-animation-shake _cart_info" data-offer-list="{{ obCartItemList.implode('item_id', '|') }}">
+    <a class="uk-text-bold uk-icon-button {% if obCartItemList.count() > 0 %} uk-text-danger{% endif %}" href="{{ 'cart'|page }}" uk-icon="icon: cart; ratio: 1.5"></a>
+    <span>Goods: <strong>{{ obCartItemList.count() }}</strong>,
+        Total cost: <strong>{{ obCartItemList.getTotalPrice() }} {{ obCartItemList.getCurrency() }}</strong>
+    </span>
+</div>

@@ -1,0 +1,45 @@
+title = "Cart"
+url = "/cart"
+layout = "main"
+is_hidden = 0
+
+[ShippingTypeList]
+
+[PaymentMethodList]
+
+[MakeOrder]
+mode = "ajax"
+flash_on = 0
+redirect_on = 1
+redirect_page = "order_success"
+==
+<div class="uk-grid uk-margin-remove-left">
+    <div class="uk-width-5-6">
+        {% partial 'breadcrumbs/simple_breadcrumbs' %}
+        {% partial 'common/page_title' sPageTitle=this.page.title %}
+
+        <div class="_cart_item_list">
+            {% partial 'cart/cart_item_list' %}
+        </div>
+        <div class="uk-child-width-1-2" uk-grid>
+            <div class="uk-margin-small-top">
+                {% partial 'cart/cart_form' %}
+            </div>
+            <div class="uk-text-large">
+                <div class="uk-grid-small" uk-grid>
+                    <div class="uk-width-expand" uk-leader><strong>Total price:</strong></div>
+                    <div>
+                        <span class="uk-text-danger">
+                            <strong class="_cart_total_cost">
+                                {% partial 'cart/cart_total_cost' %}
+                            </strong>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="uk-width-1-6">
+        {% partial 'right_panel/cart_page' %}
+    </div>
+</div>

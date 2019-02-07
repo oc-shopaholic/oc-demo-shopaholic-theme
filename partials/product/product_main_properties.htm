@@ -1,0 +1,16 @@
+{# Render product properties #}
+{# Get group  with code 'main' #}
+{% set obGroup = obProduct.property.getGroupList().getByCode('main') %}
+{% if obGroup.isNotEmpty() %}
+    {# Get property collection, apply sorting and filters by active, group #}
+    {% set obPropertyList = obProduct.property.group(obGroup.id).active().sort() %}
+    {% if obPropertyList.isNotEmpty() %}
+        <ul class="{{ sColumnClass|default('uk-column-1-3') }} uk-flex">
+            {% for obProperty in obPropertyList if obProperty.hasValue() %}
+                <li class="uk-width-1-3 uk-padding-small uk-padding-remove-top uk-padding-remove-bottom">
+                    {{ obProperty.name }}: {{ obProperty.property_value.getValueString() }} {{ obProperty.measure.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}

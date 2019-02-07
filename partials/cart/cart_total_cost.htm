@@ -1,0 +1,10 @@
+{#
+    @var obPriceData \Lovata\OrdersShopaholic\Classes\PromoMechanism\PriceContainer
+#}
+
+{% set obCartItemList = Cart.get() %}
+{% set obPriceData = obCartItemList.getTotalPriceData() %}
+{{ obPriceData.price }} {{ obCartItemList.getCurrency() }}
+{% if obPriceData.discount_price_value > 0 %}
+    <s>{{ obPriceData.old_price }} {{ obCartItemList.getCurrency() }}</s> (-{{ obPriceData.discount_price }})
+{% endif %}

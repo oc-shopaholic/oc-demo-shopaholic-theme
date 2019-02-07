@@ -1,0 +1,37 @@
+title = "Index"
+url = "/"
+layout = "main"
+meta_title = "OctoberCMS - Shopaholic plugin"
+is_hidden = 0
+
+[ProductList]
+==
+<?php
+function onInit()
+{
+    $this['bHasPopularityPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.PopularityShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.PopularityShopaholic');
+    $this['bHasFilterPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.FilterShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.FilterShopaholic');
+}
+?>
+==
+<div class="container">
+    {% partial 'section/plugin_slider' %}
+<div class="product_sliders">
+
+    {% if bHasPopularityPlugin %}
+        <p class="uk-text-lead uk-text-large">Popular goods:</p>
+        {% set obProductList = ProductList.make().active().sort('popularity|desc').take(8) %}
+        {% partial 'product/product_slider' obProductList=obProductList %}
+    {% endif %}
+
+    {% set obProductList = ProductList.make().active().random(8) %}
+    <p class="uk-text-lead uk-text-large">Random goods:</p>
+    {% partial 'product/product_slider' obProductList=obProductList %}
+
+    {% if bHasFilterPlugin %}
+        {% set obProductList = ProductList.make().active().filterByDiscount().random(8) %}
+        <p class="uk-text-lead uk-text-large">With discount:</p>
+        {% partial 'product/product_slider' obProductList=obProductList %}
+    {% endif %}
+</div>
+</div>

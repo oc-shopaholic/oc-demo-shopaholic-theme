@@ -1,0 +1,85 @@
+<form class="uk-form-horizontal uk-margin-large _make_order_form">
+
+    <div class="uk-margin">
+        <label class="uk-form-label" for="first-name-field">First name</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="first-name-field" type="text" name="name" placeholder="Andrey">
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <label class="uk-form-label" for="last-name-field">Last name</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="last-name-field" type="text" name="last_name" placeholder="Kharanenka">
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <label class="uk-form-label" for="email-field">Email</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="email-field" type="text" name="email" placeholder="kharanenka@gmail.com">
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <label class="uk-form-label" for="phone-field">Phone</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="phone-field" type="text" name="phone" placeholder="+375 (11) 111-11-11">
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <label class="uk-form-label" for="address-field">Address</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="address-field" type="text" name="address" placeholder="Minsk">
+        </div>
+    </div>
+
+    {# Get payment method list #}
+    {% set obPaymentMethodList = PaymentMethodList.make().sort().active() %}
+    {% if obPaymentMethodList.isNotEmpty() %}
+    <div class="uk-margin">
+        <div class="uk-form-label">Payment method</div>
+        <div class="uk-form-controls uk-form-controls-text">
+            {% for obPaymentMethod in obPaymentMethodList %}
+            <div>
+                <label>
+                    <input class="uk-radio uk-margin-small-right" type="radio" name="payment_method_id" value="{{ obPaymentMethod.id }}" {% if loop.first %}checked{% endif %}>
+                    {{ obPaymentMethod.name }}
+                    {% if obPaymentMethod.preview_text is not empty %}
+                        <span uk-icon="icon: question; ratio: 0.8" title="{{ obPaymentMethod.preview_text }}" uk-tooltip></span>
+                    {% endif %}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {# Get shipping type list #}
+    {% set obShippingTypeList = ShippingTypeList.make().sort().active() %}
+    {% if obShippingTypeList.isNotEmpty() %}
+    <div class="uk-margin">
+        <div class="uk-form-label">Shipping type</div>
+        <div class="uk-form-controls uk-form-controls-text">
+            {% for obShippingType in obShippingTypeList %}
+                <div>
+                    <label>
+                        <input class="uk-radio uk-margin-small-right" type="radio" name="shipping_type_id" value="{{ obShippingType.id }}" {% if loop.first %}checked{% endif %}>
+                        {{ obShippingType.name }}
+                        {% if obShippingType.preview_text is not empty %}
+                            <span uk-icon="icon: question; ratio: 0.8" title="{{ obShippingType.preview_text }}" uk-tooltip></span>
+                        {% endif %}
+                    </label>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="uk-alert-danger uk-hidden _make_order_error" uk-alert>
+        <p></p>
+    </div>
+    <button type="submit" class="uk-button uk-button-danger">Checkout</button>
+</form>

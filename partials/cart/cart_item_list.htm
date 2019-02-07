@@ -1,0 +1,11 @@
+{# Get CartElementCollection class object #}
+{% set obCartItemList = Cart.get() %}
+{% if obCartItemList.count() > 0 %}
+    {% for obCartItem in obCartItemList %}
+        {% partial 'card/product_cart_item' obCartItem=obCartItem obCartItemList=obCartItemList %}
+    {% endfor %}
+{% else %}
+    <div class="uk-alert-danger" uk-alert>
+        <p><strong>Cart is empty!</strong></p>
+    </div>
+{% endif %}

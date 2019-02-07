@@ -1,0 +1,49 @@
+name: Main
+items:
+    -
+        title: 'Quick start guide'
+        nesting: ''
+        type: cms-page
+        url: ''
+        code: navbarQuickStartGuide
+        reference: quick_start_guide
+        cmsPage: ''
+        replace: ''
+        viewBag:
+            isHidden: '1'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: Brands
+        nesting: ''
+        type: cms-page
+        url: ''
+        code: ''
+        reference: brand_list
+        cmsPage: ''
+        replace: ''
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: Catalog
+        type: cms-page
+        code: ''
+        reference: category_list
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+        items:
+            -
+                title: 'Category list'
+                nesting: '0'
+                type: shop-catalog
+                code: ''
+                cmsPage: category
+                replace: '1'
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'

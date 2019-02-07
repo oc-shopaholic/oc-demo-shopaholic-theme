@@ -1,0 +1,25 @@
+{# @var obProduct \Lovata\Shopaholic\Classes\Item\ProductItem #}
+<div class="uk-position-relative" uk-slideshow="animation: fade">
+    <div uk-grid>
+        <div class="product_thumbnav_wrapper  uk-width-1-4">
+            <ul class="uk-thumbnav uk-thumbnav-vertical">
+                {% for sKey,obImage in obProduct.images %}
+                    <li uk-slideshow-item="{{ sKey }}">
+                        <a href="#">
+                            <img src="{{ obImage.getThumb(60, 80) }}" alt="">
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="product_gallery_wrapper uk-padding-remove  uk-width-3-4" uk-slideshow="ratio: 50:66">
+            <ul class="uk-slideshow-items">
+                {% for obImage in obProduct.images %}
+                    <li>
+                        <img src="{{ obImage.getThumb(500, 660) }}" alt="">
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

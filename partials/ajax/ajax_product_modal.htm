@@ -1,0 +1,6 @@
+{# Get product item #}
+{% set obProduct = ProductData.get(input('product_id')) %}
+<div class="product_info_wrapper" uk-grid>
+    {% partial 'product/product_gallery' obProduct=obProduct %}
+    {% partial 'product/product_modal_info' obProduct=obProduct %}
+</div>

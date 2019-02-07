@@ -1,0 +1,5 @@
+<div>
+    {% for i in 1..5 %}
+        <span {% if iRating >= i - 0.5 %}class="uk-text-warning"{% endif %} uk-icon="icon: star; ratio: {{ ration|default(1.5) }}"></span>
+    {% endfor %}
+</div>

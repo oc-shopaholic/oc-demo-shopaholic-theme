@@ -1,0 +1,137 @@
+title = "Product page"
+url = "/catalog/:main_category/:category/:slug"
+layout = "main"
+meta_title = "Product page"
+is_hidden = 0
+
+[CategoryPage]
+slug = "{{ :category }}"
+slug_required = 1
+smart_url_check = 0
+
+[CategoryPage ParentCategoryPage]
+slug = "{{ :main_category }}"
+slug_required = 1
+smart_url_check = 0
+
+[ProductPage]
+slug = "{{ :slug }}"
+slug_required = 1
+smart_url_check = 1
+
+[CatalogBreadcrumbs]
+
+[ProductData]
+
+[Pagination]
+count_per_page = 5
+pagination_limit = 5
+active_class = "uk-active"
+button_list = "prev,first,first-more,main,last-more,last,next"
+first_button_name = "First"
+first_button_limit = 3
+first-more_button_name = "..."
+first-more_button_limit = 3
+prev_button_name = "Prev"
+prev_button_limit = 1
+prev-more_button_name = "..."
+prev-more_button_limit = 1
+next-more_button_name = "..."
+next-more_button_limit = 1
+next_button_name = "Next"
+next_button_limit = 1
+last-more_button_name = "..."
+last-more_button_limit = 3
+last_button_name = "Last"
+last_button_limit = 3
+==
+<?php
+function onInit()
+{
+    /**
+     * Check if MakeReview component has been registered and autoload it
+     **/
+    // [MakeReview]
+    // mode = "ajax"
+
+    $obManager = \Cms\Classes\ComponentManager::instance();
+    if ($obManager->hasComponent('Lovata\ReviewsShopaholic\Components\MakeReview')){
+        $this->addComponent('Lovata\ReviewsShopaholic\Components\MakeReview', 'MakeReview', [ 'mode' => 'ajax']);
+    }
+
+    $this['bHasPropertiesPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.PropertiesShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.PropertiesShopaholic');
+    $this['bHasRelatedProductsPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.RelatedProductsShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.RelatedProductsShopaholic');
+    $this['bHasReviewsPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.ReviewsShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.ReviewsShopaholic');
+    $this['bHasAccessoriesPlugin'] = \System\Classes\PluginManager::instance()->hasPlugin('Lovata.AccessoriesShopaholic') && !\System\Classes\PluginManager::instance()->isDisabled('Lovata.AccessoriesShopaholic');
+}
+?>
+==
+{# Get product item #}
+{# @var obProduct \Lovata\Shopaholic\Classes\Item\ProductItem #}
+{% set obProduct = ProductPage.get() %}
+
+{# Get breadcrumbs #}
+{% set arBreadcrumbs = CatalogBreadcrumbs.getByProductID(obProduct.id) %}
+
+<div class="uk-grid uk-margin-small-left">
+    <div class="uk-width-5-6">
+        <div class="uk-margin-small-bottom">
+            {% partial 'breadcrumbs/catalog' arBreadcrumbs=arBreadcrumbs %}
+        </div>
+
+        <div class="product_info_wrapper" uk-grid>
+            {% partial 'product/product_gallery' obProduct=obProduct %}
+            {% partial 'product/product_info' obProduct=obProduct %}
+        </div>
+
+        <hr class="uk-padding-remove uk-margin-remove-top">
+
+        {% set obRelatedProductList = obProduct.related.active() %}
+        {% set obAccessoryProductList = obProduct.accessory.active() %}
+        <div>
+            <ul uk-tab="animation: uk-animation-fade">
+                {% if bHasPropertiesPlugin %}
+                <li><a href="#">Characteristics</a></li>
+                {% endif %}
+                {% if bHasRelatedProductsPlugin and obRelatedProductList.isNotEmpty() %}
+                    <li><a href="#">Related</a></li>
+                {% endif %}
+                {% if bHasReviewsPlugin %}
+                    <li><a href="#">Reviews</a></li>
+                {% endif %}
+                {% if bHasAccessoriesPlugin and obAccessoryProductList.isNotEmpty() %}
+                    <li><a href="#">Accessories</a></li>
+                {% endif %}
+            </ul>
+
+            <div class="uk-switcher uk-margin">
+                {% if bHasPropertiesPlugin %}
+                <div>
+                    {% partial 'product/product_properties' obProduct=obProduct %}
+                </div>
+                {% endif %}
+                {% if bHasRelatedProductsPlugin and obRelatedProductList.isNotEmpty() %}
+                <div>
+                    {% partial 'product/product_slider' obProductList=obRelatedProductList %}
+                </div>
+                {% endif %}
+                {% if bHasReviewsPlugin %}
+                <div>
+                    {% partial 'section/review_list_wrapper' obProduct=obProduct %}
+                </div>
+                {% endif %}
+                {% if bHasAccessoriesPlugin  and obAccessoryProductList.isNotEmpty() %}
+                <div>
+                    {% partial 'product/product_slider' obProductList=obAccessoryProductList %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="uk-margin-small-top">
+            {% partial 'product/product_description' obProduct=obProduct %}
+        </div>
+    </div>
+    <div class="uk-width-1-6">
+        {% partial 'right_panel/product_page' %}
+    </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="uk-width-expand">
+    <div class="uk-margin-small-top">
+        <h2 class="uk-heading-bullet"><a href="{{ obProduct.getPageUrl('product') }}">{{ obProduct.name }}</a></h2>
+    </div>
+
+    <div class="uk-text-middle">
+        {% partial 'product/product_rating' iRating=obProduct.rating %}
+    </div>
+
+    {% if obProduct.preview_text is not empty %}
+        <div class="uk-section-xsmall">{{ obProduct.preview_text }}</div>
+    {% endif %}
+
+    {% partial 'product/product_main_properties' obProduct=obProduct sColumnClass='uk-column-1-2' %}
+
+    <div>
+        {% set obOffer = obProduct.offer.active().first() %}
+        <strong class="uk-text-danger uk-text-large">{{ obOffer.price }} {{ obOffer.currency }}</strong>
+        {% if obOffer.old_price_value > 0 %}
+            <s class="uk-margin-small-left">{{ obOffer.old_price }} {{ obOffer.currency }}</s>
+        {% endif %}
+    </div>
+    <form class="_choose_offer_form">
+        <fieldset class="uk-fieldset">
+            {% set obOfferList = obProduct.offer.active() %}
+            {% if bHasPropertiesPlugin %}
+
+                {% set obProperty = obOffer.property.active().sort().first() %}
+                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                    <span>{{ obProperty.name }}:</span>
+                    {% for obOffer in obOfferList %}
+                        <label class="_choose_offer_field {% if obOffer.quantity == 0 %}uk-text-muted{% endif %}" {% if obOffer.quantity == 0 %}title="Offer is not available" uk-tooltip{% endif %}>
+                            <input
+                                    class="uk-radio uk-margin-small-right"
+                                    type="radio"
+                                    name="offer_id"
+                                    value="{{ obOffer.id }}"
+                                    data-quantity="{{ obOffer.quantity }}"
+                                    {% if obOffer.quantity == 0 %} disabled{% endif %}>
+                            {{ obOffer.property.find(obProperty.id).property_value.getValueString() }} {{ obProperty.measure.name }}
+                        </label>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="uk-margin uk-child-width-auto">
+                    {% for obOffer in obOfferList %}
+                        <div>
+                            <label class="_choose_offer_field {% if obOffer.quantity == 0 %}uk-text-muted{% endif %}" {% if obOffer.quantity == 0 %}title="Offer is not available" uk-tooltip{% endif %}>
+                                <input
+                                        class="uk-radio uk-margin-small-right"
+                                        type="radio"
+                                        name="offer_id"
+                                        value="{{ obOffer.id }}"
+                                        data-quantity="{{ obOffer.quantity }}" {% if obOffer.quantity == 0 %}disabled{% endif %}>
+                                {{ obOffer.name }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="uk-margin">
+                <input class="uk-input uk-form-width-small _quantity_field" type="number" name="quantity" min="1" max="99" placeholder="Quantity" value="1">
+            </div>
+        </fieldset>
+        <button class="uk-margin-small-right" uk-icon="icon: heart; ratio: 1.5"></button>
+        <button type="submit" class="uk-button uk-button-secondary uk-width-2-5 _offer_buy_button">Buy</button>
+        <a href="{{ 'cart'|page }}" class="uk-button uk-button-danger uk-width-2-5 uk-hidden _offer_in_cart_button">In cart</a>
+    </form>
+</div>
+

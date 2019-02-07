@@ -1,0 +1,42 @@
+{# @var obProduct \Lovata\Shopaholic\Classes\Item\ProductItem #}
+
+<div class="uk-flex uk-flex-row">
+    <div class="review_list_wrapper uk-width-expand">
+        {% partial 'ajax/ajax_review_list' obProduct=obProduct %}
+    </div>
+    <div class="uk-width-1-3 uk-grid uk-padding">
+        <div>
+            <button class="uk-button uk-button-secondary uk-text-center" uk-toggle="target: #review-modal" type="button">Create review</button>
+        </div>
+    </div>
+</div>
+
+<div uk-modal id="review-modal">
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-outside" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Create review</h2>
+        </div>
+        <div class="uk-modal-body">
+            <form class="create_review_form">
+                <fieldset class="uk-fieldset">
+                    <div class="uk-margin">
+                        <input name="name" class="uk-input" type="text" placeholder="Andrey Kharanenka" required>
+                    </div>
+                    <div class="uk-margin">
+                        <textarea name="comment" class="uk-textarea" rows="5" placeholder="My rating is" required></textarea>
+                    </div>
+                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                        {% for i in 1..5 %}
+                            <label>
+                                <input class="uk-radio" type="radio" name="rating" value="{{ i }}" {% if loop.last == true %}checked{% endif %}> {{ i }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <input name="product_id" type="hidden" value="{{ obProduct.id }}">
+                    <button type="submit" class="uk-button uk-button-secondary">Create</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
