@@ -1,15 +1,23 @@
-# Fake data for Shopaholic
+# Demo theme for Shopaholic plugin
 
-E-Commerce plugin by [LOVATA](https://lovata.com) for October CMS.
+# Installation guide
 
-## Artisan command list
-
-### **shopaholic:generate.fake.data**
-
-Fills catalog with fake data. Catalog will be cleared before filling.
+1. Install theme in your project (themes/shopaholic-demo folder)
+2. Install plugins:
+  * [Static Pages](http://octobercms.com/plugin/rainlab-pages) - required
+  * [Twig Extensions](http://octobercms.com/plugin/vojtasvoboda-twigextensions) - required
+  * [Toolbox](http://octobercms.com/plugin/lovata-toolbox) - required
+  * [Shopaholic](http://octobercms.com/plugin/lovata-shopaholic) - required
+  * [Orders for Shopaholic](http://octobercms.com/plugin/lovata-ordersshopaholic) - required
+  * [Buddies](http://octobercms.com/plugin/lovata-buddies) - required
+3. Install ["Fake data for Shopaholic"](https://github.com/lovata/oc-fake-data-shopaholic-plugin) plugin.
+4. Fills catalog with fake data. Catalog will be cleared before filling.
 ```bash
 php artisan shopaholic:generate.fake.data
 ```
+
+> If you add new extensions of [Shopaholic](http://octobercms.com/plugin/lovata-shopaholic) plugin,
+you need to run ```php artisan shopaholic:generate.fake.data``` command again.
 
 ## Get involved
 
