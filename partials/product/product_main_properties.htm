@@ -6,10 +6,12 @@
     {% set obPropertyList = obProduct.property.group(obGroup.id).active().sort() %}
     {% if obPropertyList.isNotEmpty() %}
         <ul class="{{ sColumnClass|default('uk-column-1-3') }} uk-flex">
-            {% for obProperty in obPropertyList if obProperty.hasValue() %}
-                <li class="uk-width-1-3 uk-padding-small uk-padding-remove-top uk-padding-remove-bottom">
-                    {{ obProperty.name }}: {{ obProperty.property_value.getValueString() }} {{ obProperty.measure.name }}
-                </li>
+            {% for obProperty in obPropertyList %}
+                {% if obProperty.hasValue() %}
+                    <li class="uk-width-1-3 uk-padding-small uk-padding-remove-top uk-padding-remove-bottom">
+                        {{ obProperty.name }}: {{ obProperty.property_value.getValueString() }} {{ obProperty.measure.name }}
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     {% endif %}

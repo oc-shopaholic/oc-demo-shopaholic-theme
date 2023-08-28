@@ -29,13 +29,15 @@ sorting = "new"
         <h4>Category list:</h4>
         {% if obParentCategory.children is not empty %}
             <ul class="uk-list uk-list-bullet">
-                {% for obCategory in obParentCategory.children if obCategory.product_count > 0 %}
-                    <li>
-                        <a class="uk-text-large" href="{{ obCategory.getPageUrl('product_list') }}">{{ obCategory.name }}</a>
-                        {# Get random product from category #}
-                        {% set obProductList = ProductList.make().category(obCategory.id).active().random(6) %}
-                        {% partial 'product/product_slider' obProductList=obProductList %}
-                    </li>
+                {% for obCategory in obParentCategory.children  %}
+                    {% if obCategory.product_count > 0 %}
+                        <li>
+                            <a class="uk-text-large" href="{{ obCategory.getPageUrl('product_list') }}">{{ obCategory.name }}</a>
+                            {# Get random product from category #}
+                            {% set obProductList = ProductList.make().category(obCategory.id).active().random(6) %}
+                            {% partial 'product/product_slider' obProductList=obProductList %}
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         {% endif %}

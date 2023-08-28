@@ -52,49 +52,51 @@
             {% set obPropertyList = obCategory.product_filter_property %}
             {% if obPropertyList.isNotEmpty() %}
                 {# Process property list #}
-                {% for obProperty in obPropertyList if obProperty.hasValue() %}
+                {% for obProperty in obPropertyList %}
+                    {% if obProperty.hasValue() %}
 
-                    {# Get filter type #}
-                    {% set sFilterType = obPropertyList.getFilterType(obProperty.id) %}
+                        {# Get filter type #}
+                        {% set sFilterType = obPropertyList.getFilterType(obProperty.id) %}
 
-                    {# Get proeprty value list #}
-                    {% set obPropertyValueList = obProperty.property_value.sort() %}
+                        {# Get proeprty value list #}
+                        {% set obPropertyValueList = obProperty.property_value.sort() %}
 
-                    <div class="uk-margin">
-                        <span class="uk-form-label uk-display-block">{{ obPropertyList.getFilterName(obProperty.id) }}</span>
+                        <div class="uk-margin">
+                            <span class="uk-form-label uk-display-block">{{ obPropertyList.getFilterName(obProperty.id) }}</span>
 
-                        {# Render filtre with type == select_between #}
-                        {% if sFilterType == 'select_between' %}
-                            <select name="product[{{ obProperty.id }}][from]" class="uk-select filter_between">
-                                <option value=""></option>
+                            {# Render filtre with type == select_between #}
+                            {% if sFilterType == 'select_between' %}
+                                <select name="product[{{ obProperty.id }}][from]" class="uk-select filter_between">
+                                    <option value=""></option>
+                                    {% for obValue in obPropertyValueList %}
+                                        <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select name="product[{{ obProperty.id }}][to]" class="uk-select filter_between">
+                                    <option value=""></option>
+                                    {% for obValue in obPropertyValueList %}
+                                        <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% elseif sFilterType == 'select' %}
+                                <select name="product[{{ obProperty.id }}]" class="uk-select">
+                                    <option value=""></option>
+                                    {% for obValue in obPropertyValueList %}
+                                        <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% elseif sFilterType == 'checkbox' %}
                                 {% for obValue in obPropertyValueList %}
-                                    <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
+                                    <div>
+                                        <label>
+                                            <input name="product[{{ obProperty.id }}][]" value="{{ obValue.slug }}" class="uk-checkbox uk-margin-small-right" type="checkbox">
+                                            {{ obValue.value }}
+                                        </label>
+                                    </div>
                                 {% endfor %}
-                            </select>
-                            <select name="product[{{ obProperty.id }}][to]" class="uk-select filter_between">
-                                <option value=""></option>
-                                {% for obValue in obPropertyValueList %}
-                                    <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
-                                {% endfor %}
-                            </select>
-                        {% elseif sFilterType == 'select' %}
-                            <select name="product[{{ obProperty.id }}]" class="uk-select">
-                                <option value=""></option>
-                                {% for obValue in obPropertyValueList %}
-                                    <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
-                                {% endfor %}
-                            </select>
-                        {% elseif sFilterType == 'checkbox' %}
-                            {% for obValue in obPropertyValueList %}
-                                <div>
-                                    <label>
-                                        <input name="product[{{ obProperty.id }}][]" value="{{ obValue.slug }}" class="uk-checkbox uk-margin-small-right" type="checkbox">
-                                        {{ obValue.value }}
-                                    </label>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
 
@@ -102,47 +104,49 @@
             {% set obPropertyList = obCategory.offer_filter_property %}
             {% if obPropertyList.isNotEmpty() %}
                 {# Process property list #}
-                {% for obProperty in obPropertyList if obProperty.hasValue() %}
+                {% for obProperty in obPropertyList %}
+                    {% if obProperty.hasValue() %}
 
-                    {# Get filter type #}
-                    {% set sFilterType = obPropertyList.getFilterType(obProperty.id) %}
+                        {# Get filter type #}
+                        {% set sFilterType = obPropertyList.getFilterType(obProperty.id) %}
 
-                    {# Get proeprty value list #}
-                    {% set obPropertyValueList = obProperty.property_value.sort() %}
+                        {# Get proeprty value list #}
+                        {% set obPropertyValueList = obProperty.property_value.sort() %}
 
-                    <div class="uk-margin">
-                        <span class="uk-form-label uk-display-block">{{ obPropertyList.getFilterName(obProperty.id) }}</span>
+                        <div class="uk-margin">
+                            <span class="uk-form-label uk-display-block">{{ obPropertyList.getFilterName(obProperty.id) }}</span>
 
-                        {# Render filtre with type == select_between #}
-                        {% if sFilterType == 'select_between' %}
-                            <select name="offer[{{ obProperty.id }}][from]" class="uk-select filter_between">
+                            {# Render filtre with type == select_between #}
+                            {% if sFilterType == 'select_between' %}
+                                <select name="offer[{{ obProperty.id }}][from]" class="uk-select filter_between">
+                                    {% for obValue in obPropertyValueList %}
+                                        <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select name="offer[{{ obProperty.id }}][to]" class="uk-select filter_between">
+                                    {% for obValue in obPropertyValueList %}
+                                        <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% elseif sFilterType == 'select' %}
+                                <select name="offer[{{ obProperty.id }}]" class="uk-select">
+                                    <option value="">All</option>
+                                    {% for obValue in obPropertyValueList %}
+                                        <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% elseif sFilterType == 'checkbox' %}
                                 {% for obValue in obPropertyValueList %}
-                                    <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
+                                    <div>
+                                        <label>
+                                            <input name="offer[{{ obProperty.id }}][]" value="{{ obValue.slug }}" class="uk-checkbox uk-margin-small-right" type="checkbox">
+                                            {{ obValue.value }}
+                                        </label>
+                                    </div>
                                 {% endfor %}
-                            </select>
-                            <select name="offer[{{ obProperty.id }}][to]" class="uk-select filter_between">
-                                {% for obValue in obPropertyValueList %}
-                                    <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
-                                {% endfor %}
-                            </select>
-                        {% elseif sFilterType == 'select' %}
-                            <select name="offer[{{ obProperty.id }}]" class="uk-select">
-                                <option value="">All</option>
-                                {% for obValue in obPropertyValueList %}
-                                    <option value="{{ obValue.slug }}">{{ obValue.value }}</option>
-                                {% endfor %}
-                            </select>
-                        {% elseif sFilterType == 'checkbox' %}
-                            {% for obValue in obPropertyValueList %}
-                                <div>
-                                    <label>
-                                        <input name="offer[{{ obProperty.id }}][]" value="{{ obValue.slug }}" class="uk-checkbox uk-margin-small-right" type="checkbox">
-                                        {{ obValue.value }}
-                                    </label>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
 
