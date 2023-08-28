@@ -16,19 +16,23 @@ is_hidden = 0
         {% set obCategoryList = CategoryList.make().tree() %}
         {% if obCategoryList.isNotEmpty %}
         <ul class="uk-list uk-list-bullet">
-            {% for obParentCategory in obCategoryList if obParentCategory.product_count > 0 %}
-            <li>
-                <a href="{{ obParentCategory.getPageUrl('category') }}">{{ obParentCategory.name }}</a>
-                {% if obParentCategory.children is not empty %}
-                <ul class="uk-list uk-list-bullet">
-                    {% for obCategory in obParentCategory.children if obCategory.product_count > 0  %}
-                        <li>
-                            <a href="{{ obCategory.getPageUrl('product_list') }}">{{ obCategory.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
+            {% for obParentCategory in obCategoryList %}
+                {% if obParentCategory.product_count > 0 %}
+                    <li>
+                        <a href="{{ obParentCategory.getPageUrl('category') }}">{{ obParentCategory.name }}</a>
+                        {% if obParentCategory.children is not empty %}
+                            <ul class="uk-list uk-list-bullet">
+                                {% for obCategory in obParentCategory.children %}
+                                    {% if obCategory.product_count > 0 %}
+                                        <li>
+                                            <a href="{{ obCategory.getPageUrl('product_list') }}">{{ obCategory.name }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
                 {% endif %}
-            </li>
             {% endfor %}
         </ul>
         {% endif %}

@@ -16,17 +16,19 @@
                 <dt>{{ obGroup.name }}</dt>
                 <dd>
                     <ul class="uk-list ">
-                        {% for obProperty in obGroupPropertyList if obProperty.hasValue() %}
-                            <li>
-                                <div class="uk-grid-small" uk-grid>
-                                    <div class="uk-width-expand" uk-leader>{{ obProperty.name }}
-                                        {% if obProperty.description is not empty %}
-                                            <span uk-icon="icon: question; ratio: 0.8" title="{{ obProperty.description }}" uk-tooltip></span>
-                                        {% endif %}
+                        {% for obProperty in obGroupPropertyList %}
+                            {% if obProperty.hasValue() %}
+                                <li>
+                                    <div class="uk-grid-small" uk-grid>
+                                        <div class="uk-width-expand" uk-leader>{{ obProperty.name }}
+                                            {% if obProperty.description is not empty %}
+                                                <span uk-icon="icon: question; ratio: 0.8" title="{{ obProperty.description }}" uk-tooltip></span>
+                                            {% endif %}
+                                        </div>
+                                        <div>{{ obProperty.property_value.getValueString() }} {{ obProperty.measure.name }}</div>
                                     </div>
-                                    <div>{{ obProperty.property_value.getValueString() }} {{ obProperty.measure.name }}</div>
-                                </div>
-                            </li>
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </dd>

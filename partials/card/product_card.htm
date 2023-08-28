@@ -32,7 +32,7 @@
             </div>
             <div class="uk-card-body  uk-padding-small">
                 {# Render preview text #}
-                <p>{{ obProduct.preview_text| truncate(150) }}</p>
+                <p>{{ obProduct.preview_text| str_limit(150) }}</p>
 
                 {% partial 'product/product_main_properties' obProduct=obProduct %}
             </div>

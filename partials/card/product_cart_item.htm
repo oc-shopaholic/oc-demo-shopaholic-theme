@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="uk-card-body uk-padding-small">
-                    <p>{{ obProduct.preview_text| truncate(150) }}</p>
+                    <p>{{ obProduct.preview_text| str_limit(150) }}</p>
                 </div>
 
                 {% if bHasPropertiesPlugin %}
